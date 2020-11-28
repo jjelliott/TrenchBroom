@@ -174,7 +174,7 @@ namespace TrenchBroom {
         }
 
         float FlyModeHelper::moveSpeed() const {
-            return pref(Preferences::CameraFlyMoveSpeed);
+            return 2.0f * pref(Preferences::CameraFlyMoveSpeed);
         }
     }
 }

@@ -122,6 +122,7 @@ namespace TrenchBroom {
             layout->addRow("Up", m_upKeyEditor);
             layout->addRow("Down", m_downKeyEditor);
             layout->addRow("Speed", m_flyMoveSpeedSlider);
+            layout->addRow("", makeInfo(new QLabel("Turn mouse wheel while holding right mouse button in 3D view to adjust speed on the fly.")));
 
             setLayout(layout);
             setMinimumWidth(400);
