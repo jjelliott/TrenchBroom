@@ -2683,6 +2683,8 @@ namespace TrenchBroom {
         }
 
         void MapDocument::bindObservers() {
+            nodesDidChangeNotifier.addObserver(this, &MapDocument::nodesDidChange);
+
             PreferenceManager& prefs = PreferenceManager::instance();
             prefs.preferenceDidChangeNotifier.addObserver(this, &MapDocument::preferenceDidChange);
             m_editorContext->editorContextDidChangeNotifier.addObserver(editorContextDidChangeNotifier);
@@ -2694,13 +2696,14 @@ namespace TrenchBroom {
             documentWasLoadedNotifier.addObserver(this, &MapDocument::initializeNodeTags);
             nodesWereAddedNotifier.addObserver(this, &MapDocument::initializeNodeTags);
             nodesWillBeRemovedNotifier.addObserver(this, &MapDocument::clearNodeTags);
-            nodesDidChangeNotifier.addObserver(this, &MapDocument::updateNodeTags);
             brushFacesDidChangeNotifier.addObserver(this, &MapDocument::updateFaceTags);
             modsDidChangeNotifier.addObserver(this, &MapDocument::updateAllFaceTags);
             textureCollectionsDidChangeNotifier.addObserver(this, &MapDocument::updateAllFaceTags);
         }
 
         void MapDocument::unbindObservers() {
+            nodesDidChangeNotifier.removeObserver(this, &MapDocument::nodesDidChange);
+
             PreferenceManager& prefs = PreferenceManager::instance();
             prefs.preferenceDidChangeNotifier.removeObserver(this, &MapDocument::preferenceDidChange);
             m_editorContext->editorContextDidChangeNotifier.removeObserver(editorContextDidChangeNotifier);
@@ -2712,10 +2715,13 @@ namespace TrenchBroom {
             documentWasLoadedNotifier.removeObserver(this, &MapDocument::initializeNodeTags);
             nodesWereAddedNotifier.removeObserver(this, &MapDocument::initializeNodeTags);
             nodesWillBeRemovedNotifier.removeObserver(this, &MapDocument::clearNodeTags);
-            nodesDidChangeNotifier.removeObserver(this, &MapDocument::updateNodeTags);
             brushFacesDidChangeNotifier.removeObserver(this, &MapDocument::updateFaceTags);
             modsDidChangeNotifier.removeObserver(this, &MapDocument::updateAllFaceTags);
             textureCollectionsDidChangeNotifier.removeObserver(this, &MapDocument::updateAllFaceTags);
+        }
+
+        void MapDocument::nodesDidChange(const std::vector<Model::Node*>& nodes) {
+            updateNodeTags(nodes);
         }
 
         void MapDocument::preferenceDidChange(const IO::Path& path) {

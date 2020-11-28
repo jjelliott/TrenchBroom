@@ -575,6 +575,7 @@ namespace TrenchBroom {
         private: // observers
             void bindObservers();
             void unbindObservers();
+            void nodesDidChange(const std::vector<Model::Node*>& nodes);
             void preferenceDidChange(const IO::Path& path);
             void commandDone(Command* command);
             void commandUndone(UndoableCommand* command);
