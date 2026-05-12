@@ -1229,10 +1229,8 @@ void Map::loadMaterials()
       environmentConfig().appFolderPath, // relative to the application
     };
 
-    const auto wadPaths =
-      kdl::str_split(*wadStr, ";")
-      | std::views::transform([](const auto& path) { return kdl::parse_path(path); })
-      | kdl::ranges::to<std::vector>();
+    const auto wadPaths = kdl::str_split(*wadStr, ";")
+                          | kdl::ranges::to<std::vector<std::filesystem::path>>();
 
     m_gameFileSystem->reloadWads(
       gameInfo().gameConfig.materialConfig.root, searchPaths, wadPaths, logger());

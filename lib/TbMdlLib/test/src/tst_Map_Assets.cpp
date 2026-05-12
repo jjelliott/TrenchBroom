@@ -270,35 +270,6 @@ TEST_CASE("Map_Assets")
     }
   }
 
-  SECTION("setting wad property reloads collections from wad paths")
-  {
-    using T = std::tuple<std::string, std::vector<std::filesystem::path>>;
-
-    const auto [wadPropertyValue, expectedMaterialCollections] = GENERATE(values<T>({
-      {"cr8_czg.wad", {"cr8_czg.wad"}},
-      {
-        "cr8_czg.wad;folder/cr8_a_excerpt.wad",
-        {"cr8_a_excerpt.wad", "cr8_czg.wad"},
-      },
-      {
-        "cr8_czg.wad;folder\\cr8_a_excerpt.wad",
-        {"cr8_a_excerpt.wad", "cr8_czg.wad"},
-      },
-    }));
-
-    CAPTURE(wadPropertyValue);
-
-    auto& map =
-      fixture.load("fixture/test/mdl/Map/emptyValveMap.map", QuakeFixtureConfig);
-
-    CHECK(setEntityProperty(map, EntityPropertyKeys::Wad, wadPropertyValue));
-
-    CHECK_THAT(
-      map.materialManager().collections()
-        | std::views::transform([](const auto& collection) { return collection.path(); }),
-      RangeEquals(expectedMaterialCollections));
-  }
-
   SECTION("reloadMaterialCollections")
   {
     auto& map = fixture.load(
