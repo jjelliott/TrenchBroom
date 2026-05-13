@@ -73,7 +73,7 @@ std::vector<std::filesystem::path> getWadPaths(
 std::string getWadPathStr(const std::vector<std::filesystem::path>& wadPaths)
 {
   return kdl::str_join(
-    wadPaths | std::views::transform([](const auto& path) { return path.string(); }),
+    wadPaths | std::views::transform([](const auto& path) { return path.generic_string(); }),
     ";");
 }
 
@@ -164,8 +164,8 @@ void SmartWadEditor::addWads()
     auto wadPaths = getWadPaths(nodes(), propertyKey());
     std::ranges::transform(
       pathQStrs, std::back_inserter(wadPaths), [&](const auto& pathQStr) {
-        return convertToPathType(
-          pathDialog.pathType(), pathFromQString(pathQStr), map.path(), gamePath);
+        return pathFromQString(pathAsGenericQString(convertToPathType(
+          pathDialog.pathType(), pathFromQString(pathQStr), map.path(), gamePath)));
       });
 
     setEntityProperty(map, propertyKey(), getWadPathStr(wadPaths));
